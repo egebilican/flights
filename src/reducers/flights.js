@@ -3,13 +3,17 @@ export const FLIGHTS_ACTIONS = {
   SET_CHEAP_FLIGHTS: "SET_CHEAP_FLIGHTS",
   FETCH_FLIGHTS: "FETCH_FLIGHTS",
   FETCH_FAILED: "FETCH_FAILED",
-  SET_ARRIVAL_FILTER: "SET_ARRIVAL_FILTER",
-  SET_DEPARTURE_FILTER: "SET_DEPARTURE_FILTER"
+  GO_TO_PAGE: "GO_TO_PAGE"
 };
 
 export const fetchFlights = searchTerm => ({
   type: FLIGHTS_ACTIONS.FETCH_FLIGHTS,
   searchTerm
+});
+
+export const goToPage = pageNr => ({
+  type: FLIGHTS_ACTIONS.GO_TO_PAGE,
+  pageNr
 });
 
 const formatBusinessFlights = flights => {
@@ -35,7 +39,8 @@ const formatCheapFlights = flights => {
 };
 
 const INITIAL_STATE = {
-  availableFlights: []
+  availableFlights: [],
+  pageNr: 1
 };
 
 const flights = (state = INITIAL_STATE, action) => {
@@ -62,6 +67,8 @@ const flights = (state = INITIAL_STATE, action) => {
         };
         return newState;
       } else return state;
+    case FLIGHTS_ACTIONS.GO_TO_PAGE:
+      return { ...state, pageNr: action.pageNr };
     default:
       return state;
   }

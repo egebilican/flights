@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchFlights } from "../../reducers/flights";
+import { fetchFlights, goToPage } from "../../reducers/flights";
 import {
   setArrivalFilter,
   setDepartureFilter,
@@ -11,8 +11,9 @@ import { FlightList, FlightControls } from "../../components";
 import {
   orderedListSelector,
   filtersSelector
-} from "../../selectors/mainPageSelector";
+} from "../../selectors/flightListPageSelector";
 import Container from "@material-ui/core/Container";
+import { Pagination } from "../../components/Pagination";
 
 class MainPage extends React.Component {
   fetchFlightData(searchTerm) {
@@ -37,7 +38,9 @@ class MainPage extends React.Component {
     const changeSortingMethod = () => {
       this.props.dispatch(toggleSortingMethod());
     };
-
+    const handlePageClick = pageNr => {
+      this.props.dispatch(goToPage(pageNr));
+    };
     return (
       <Container maxWidth="sm">
         <FlightControls
@@ -47,6 +50,7 @@ class MainPage extends React.Component {
           filters={this.props.filters}
         />
         <FlightList flights={this.props.flights} />
+        <Pagination currentPage={1} maxPages={2} goToPage={handlePageClick} />
       </Container>
     );
   }
