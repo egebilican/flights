@@ -1,13 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
 import { fetchFlights } from "../../reducers/flights";
-import { setArrivalFilter, setDepartureFilter } from "../../reducers/filters";
+import {
+  setArrivalFilter,
+  setDepartureFilter,
+  toggleSortingMethod,
+  toggleSortingType
+} from "../../reducers/filters";
 import { InputBar, FlightList } from "../../components";
-import { filteredSelector } from "../../selectors/mainPageSelector";
+import {
+  orderedListSelector,
+  filtersSelector
+} from "../../selectors/mainPageSelector";
 
 class MainPage extends React.Component {
   fetchFlightData(searchTerm) {
-    console.log("submit data");
     this.props.dispatch(fetchFlights(searchTerm));
   }
 
@@ -23,6 +30,12 @@ class MainPage extends React.Component {
         this.props.dispatch(setDepartureFilter(filterWord));
       }
     };
+    const changeSortingType = () => {
+      this.props.dispatch(toggleSortingType());
+    };
+    const changeSortingMethod = () => {
+      this.props.dispatch(toggleSortingMethod());
+    };
 
     return (
       <div>
@@ -36,6 +49,12 @@ class MainPage extends React.Component {
           type="departure"
           placeholder="Departure?"
         />
+        <div onClick={changeSortingMethod}>
+          Sorting Method : {this.props.filters.sortingMethod}
+        </div>
+        <div onClick={changeSortingType}>
+          Sorting Type : {this.props.filters.sortingType}
+        </div>
         <FlightList flights={this.props.flights} />
       </div>
     );
@@ -43,7 +62,8 @@ class MainPage extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  flights: filteredSelector(state)
+  flights: orderedListSelector(state),
+  filters: filtersSelector(state)
 });
 
 export default connect(mapStateToProps)(MainPage);

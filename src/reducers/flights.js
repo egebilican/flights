@@ -39,21 +39,28 @@ const INITIAL_STATE = {
 };
 
 const flights = (state = INITIAL_STATE, action) => {
-  console.log("ACTION", action);
   switch (action.type) {
     case FLIGHTS_ACTIONS.SET_BUSINESS_FLIGHTS:
       if (action && action.flights && action.flights.data) {
-        return {
+        const newState = {
           ...state,
-          availableFlights: [...formatBusinessFlights(action.flights.data)]
+          availableFlights: [
+            ...state.availableFlights,
+            ...formatBusinessFlights(action.flights.data)
+          ]
         };
+        return newState;
       } else return state;
     case FLIGHTS_ACTIONS.SET_CHEAP_FLIGHTS:
       if (action && action.flights && action.flights.data) {
-        return {
+        const newState = {
           ...state,
-          availableFlights: [...formatCheapFlights(action.flights.data)]
+          availableFlights: [
+            ...state.availableFlights,
+            ...formatCheapFlights(action.flights.data)
+          ]
         };
+        return newState;
       } else return state;
     default:
       return state;

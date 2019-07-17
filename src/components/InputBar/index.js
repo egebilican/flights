@@ -7,7 +7,6 @@ export const InputBar = props => {
   };
   const onSubmit = event => {
     event.preventDefault();
-    console.log("submit search value: ", searchTerm);
     props.handleSubmit(searchTerm, props.type);
   };
   return (

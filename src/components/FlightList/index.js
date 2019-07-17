@@ -1,6 +1,6 @@
 import React from "react";
 
-export const FlightList = ({ flights }) => {
+export const FlightList = ({ flights = [] }) => {
   const renderFlight = (flight, index) => {
     return (
       <div
@@ -11,6 +11,8 @@ export const FlightList = ({ flights }) => {
         {index}
         Arrival : {flight.arrival}
         Departure : {flight.departure}
+        Type: {flight.type}
+        Departure Time: {flight.departureTime}
       </div>
     );
   };
