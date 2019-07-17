@@ -15,7 +15,7 @@ export const fetchFlights = searchTerm => ({
 const formatBusinessFlights = flights => {
   const convertedFlights = flights.map(flight => ({
     ...flight,
-    type: "business"
+    type: "Business"
   }));
   return convertedFlights;
 };
@@ -28,7 +28,7 @@ const formatCheapFlights = flights => {
       arrival: destinations[1],
       arrivalTime: flight.arrival,
       departureTime: flight.departure,
-      type: "cheap"
+      type: "Cheap"
     };
   });
   return convertedFlights;

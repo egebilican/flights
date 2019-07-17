@@ -7,11 +7,12 @@ import {
   toggleSortingMethod,
   toggleSortingType
 } from "../../reducers/filters";
-import { InputBar, FlightList } from "../../components";
+import { FlightList, FlightControls } from "../../components";
 import {
   orderedListSelector,
   filtersSelector
 } from "../../selectors/mainPageSelector";
+import Container from "@material-ui/core/Container";
 
 class MainPage extends React.Component {
   fetchFlightData(searchTerm) {
@@ -38,25 +39,15 @@ class MainPage extends React.Component {
     };
 
     return (
-      <div>
-        <InputBar
-          handleSubmit={setFilterWord}
-          type="arrival"
-          placeholder="Arrival?"
+      <Container maxWidth="sm">
+        <FlightControls
+          setFilterWord={setFilterWord}
+          changeSortingMethod={changeSortingMethod}
+          changeSortingType={changeSortingType}
+          filters={this.props.filters}
         />
-        <InputBar
-          handleSubmit={setFilterWord}
-          type="departure"
-          placeholder="Departure?"
-        />
-        <div onClick={changeSortingMethod}>
-          Sorting Method : {this.props.filters.sortingMethod}
-        </div>
-        <div onClick={changeSortingType}>
-          Sorting Type : {this.props.filters.sortingType}
-        </div>
         <FlightList flights={this.props.flights} />
-      </div>
+      </Container>
     );
   }
 }
