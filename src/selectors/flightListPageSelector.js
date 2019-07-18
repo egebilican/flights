@@ -1,10 +1,16 @@
 import { createSelector } from "reselect";
 import { SORTING_METHODS, SORTING_TYPES } from "../reducers/filters";
+import { FLIGHTS_PER_PAGE } from "../reducers/flights";
 
 export const filtersSelector = state => state.filters;
-const arrivalFilterWordSelector = state => state.filters.arrivalFilterWord;
-const departureFilterWordSelector = state => state.filters.departureFilterWord;
+export const currentPageNumberSelector = state =>
+  state.flights.currentPageNumber;
+export const maxPageNumberSelector = state => state.flights.maxPageNumber;
+const arrivalFilterWordSelector = state => state.filters.filterWords.arrival;
+const departureFilterWordSelector = state =>
+  state.filters.filterWords.departure;
 const availableFlightsSelector = state => state.flights.availableFlights;
+
 const sortingTypeSelector = state => state.filters.sortingType;
 const sortingMethodSelector = state => state.filters.sortingMethod;
 
@@ -15,25 +21,17 @@ export const orderedListSelector = createSelector(
   availableFlightsSelector,
   sortingTypeSelector,
   sortingMethodSelector,
+  currentPageNumberSelector,
   (
     arrivalFilter,
     departureFilter,
     availableFlights,
     sortingType,
-    sortingMethod
+    sortingMethod,
+    currentPage
   ) => {
-    console.log(
-      "hey",
-      "arrival",
-      arrivalFilter,
-      "dep",
-      departureFilter,
-      "av",
-      availableFlights
-    );
     const filteredFlights = availableFlights
       .filter(item => {
-        console.log("item", item);
         return item.arrival.toLowerCase().indexOf(arrivalFilter) > -1;
       })
       .filter(
@@ -61,6 +59,11 @@ export const orderedListSelector = createSelector(
         );
       }
     }
-    return sortedFlights;
+
+    const paginatedFlights = sortedFlights.slice(
+      FLIGHTS_PER_PAGE * (currentPage - 1),
+      FLIGHTS_PER_PAGE * currentPage
+    );
+    return paginatedFlights;
   }
 );

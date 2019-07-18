@@ -2,22 +2,22 @@ import React from "react";
 import { connect } from "react-redux";
 import { fetchFlights, goToPage } from "../../reducers/flights";
 import {
-  setArrivalFilter,
-  setDepartureFilter,
   toggleSortingMethod,
-  toggleSortingType
+  toggleSortingType,
+  setFilterWords
 } from "../../reducers/filters";
 import { FlightList, FlightControls } from "../../components";
 import {
   orderedListSelector,
-  filtersSelector
+  filtersSelector,
+  currentPageNumberSelector,
+  maxPageNumberSelector
 } from "../../selectors/flightListPageSelector";
-import Container from "@material-ui/core/Container";
 import { Pagination } from "../../components/Pagination";
 
 class MainPage extends React.Component {
-  fetchFlightData(searchTerm) {
-    this.props.dispatch(fetchFlights(searchTerm));
+  fetchFlightData() {
+    this.props.fetchFlights();
   }
 
   componentDidMount() {
@@ -25,40 +25,58 @@ class MainPage extends React.Component {
   }
 
   render() {
-    const setFilterWord = (filterWord, type) => {
-      if (type === "arrival") {
-        this.props.dispatch(setArrivalFilter(filterWord));
-      } else {
-        this.props.dispatch(setDepartureFilter(filterWord));
-      }
+    const { filters, flights, currentPage, maxPageNumber } = this.props;
+    const handleSetFilterWords = filterWordsObject => {
+      this.props.setFilterWords(filterWordsObject);
     };
+
     const changeSortingType = () => {
-      this.props.dispatch(toggleSortingType());
+      this.props.toggleSortingType();
     };
     const changeSortingMethod = () => {
-      this.props.dispatch(toggleSortingMethod());
+      this.props.toggleSortingMethod();
     };
     const handlePageClick = pageNr => {
-      this.props.dispatch(goToPage(pageNr));
+      this.props.goToPage(pageNr);
     };
     return (
-      <Container maxWidth="sm">
+      <>
         <FlightControls
-          setFilterWord={setFilterWord}
+          setFilterWords={handleSetFilterWords}
           changeSortingMethod={changeSortingMethod}
           changeSortingType={changeSortingType}
-          filters={this.props.filters}
+          filters={filters}
         />
-        <FlightList flights={this.props.flights} />
-        <Pagination currentPage={1} maxPages={2} goToPage={handlePageClick} />
-      </Container>
+        <FlightList flights={flights} />
+        {flights && flights.length > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            maxPages={maxPageNumber}
+            goToPage={handlePageClick}
+          />
+        )}
+      </>
     );
   }
 }
 
 const mapStateToProps = state => ({
   flights: orderedListSelector(state),
-  filters: filtersSelector(state)
+  filters: filtersSelector(state),
+  currentPage: currentPageNumberSelector(state),
+  maxPageNumber: maxPageNumberSelector(state)
 });
 
-export default connect(mapStateToProps)(MainPage);
+const mapDispatchToProps = dispatch => ({
+  toggleSortingMethod: () => dispatch(toggleSortingMethod()),
+  toggleSortingType: () => dispatch(toggleSortingType()),
+  fetchFlights: () => dispatch(fetchFlights()),
+  goToPage: pageNr => dispatch(goToPage(pageNr)),
+  setFilterWords: filterWordsObject =>
+    dispatch(setFilterWords(filterWordsObject))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainPage);

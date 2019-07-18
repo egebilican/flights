@@ -10,7 +10,6 @@ const API = {
 function* fetchFlightData(action) {
   try {
     //TODO: MAKE THEM PARALLEL
-    console.log("SAGA WORKING");
     const businessFlights = yield call(getRequest, API.business);
     const cheapFlights = yield call(getRequest, API.cheap);
     yield put({
@@ -22,11 +21,11 @@ function* fetchFlightData(action) {
       flights: cheapFlights.data
     });
   } catch (e) {
-    console.log(e);
     yield put({
       type: FLIGHTS_ACTIONS.FETCH_FAILED,
       message: e.message
     });
+    throw new Error(e);
   }
 }
 

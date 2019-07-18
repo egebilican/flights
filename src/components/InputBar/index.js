@@ -3,15 +3,6 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
 export const InputBar = props => {
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const onSearchTermChange = event => {
-    setSearchTerm(event.target.value);
-  };
-  const onSubmit = event => {
-    event.preventDefault();
-    props.handleSubmit(searchTerm, props.type);
-  };
-
   const useStyles = makeStyles(theme => {
     return {
       textField: {
@@ -26,16 +17,14 @@ export const InputBar = props => {
   const classes = useStyles();
 
   return (
-    <form onSubmit={onSubmit}>
-      <TextField
-        id={props.id}
-        label={props.label}
-        className={classes.textField}
-        value={searchTerm}
-        onChange={onSearchTermChange}
-        margin="normal"
-        placeholder={props.placeholder}
-      />
-    </form>
+    <TextField
+      id={props.id}
+      label={props.label}
+      className={classes.textField}
+      value={props.value}
+      onChange={props.handleChange}
+      margin="normal"
+      placeholder={props.placeholder}
+    />
   );
 };

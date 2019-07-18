@@ -6,6 +6,8 @@ export const FLIGHTS_ACTIONS = {
   GO_TO_PAGE: "GO_TO_PAGE"
 };
 
+export const FLIGHTS_PER_PAGE = 5;
+
 export const fetchFlights = searchTerm => ({
   type: FLIGHTS_ACTIONS.FETCH_FLIGHTS,
   searchTerm
@@ -40,35 +42,46 @@ const formatCheapFlights = flights => {
 
 const INITIAL_STATE = {
   availableFlights: [],
-  pageNr: 1
+  currentPageNumber: 1,
+  maxPageNumber: 1
 };
 
 const flights = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case FLIGHTS_ACTIONS.SET_BUSINESS_FLIGHTS:
       if (action && action.flights && action.flights.data) {
+        const newAvailableFlights = [
+          ...state.availableFlights,
+          ...formatBusinessFlights(action.flights.data)
+        ];
+        const newMaxPageNr = Math.ceil(
+          newAvailableFlights.length / FLIGHTS_PER_PAGE
+        );
         const newState = {
           ...state,
-          availableFlights: [
-            ...state.availableFlights,
-            ...formatBusinessFlights(action.flights.data)
-          ]
+          availableFlights: newAvailableFlights,
+          maxPageNumber: newMaxPageNr
         };
         return newState;
       } else return state;
     case FLIGHTS_ACTIONS.SET_CHEAP_FLIGHTS:
       if (action && action.flights && action.flights.data) {
+        const newAvailableFlights = [
+          ...state.availableFlights,
+          ...formatCheapFlights(action.flights.data)
+        ];
+        const newMaxPageNr = Math.ceil(
+          newAvailableFlights.length / FLIGHTS_PER_PAGE
+        );
         const newState = {
           ...state,
-          availableFlights: [
-            ...state.availableFlights,
-            ...formatCheapFlights(action.flights.data)
-          ]
+          availableFlights: newAvailableFlights,
+          maxPageNumber: newMaxPageNr
         };
         return newState;
       } else return state;
     case FLIGHTS_ACTIONS.GO_TO_PAGE:
-      return { ...state, pageNr: action.pageNr };
+      return { ...state, currentPageNumber: action.pageNr };
     default:
       return state;
   }

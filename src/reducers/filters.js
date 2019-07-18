@@ -1,18 +1,13 @@
 export const FILTER_ACTIONS = {
-  SET_ARRIVAL_FILTER: "SET_ARRIVAL_FILTER",
-  SET_DEPARTURE_FILTER: "SET_DEPARTURE_FILTER",
+  SET_FILTER_WORDS: "SET_FILTER_WORDS",
+
   TOGGLE_SORTING_METHOD: "TOGGLE_SORTING_METHOD",
   TOGGLE_SORTING_TYPE: "TOGGLE_SORTING_TYPE"
 };
 
-export const setArrivalFilter = filterWord => ({
-  type: FILTER_ACTIONS.SET_ARRIVAL_FILTER,
-  filterWord
-});
-
-export const setDepartureFilter = filterWord => ({
-  type: FILTER_ACTIONS.SET_DEPARTURE_FILTER,
-  filterWord
+export const setFilterWords = filterWordsObject => ({
+  type: FILTER_ACTIONS.SET_FILTER_WORDS,
+  filterWordsObject
 });
 
 export const toggleSortingMethod = () => ({
@@ -33,24 +28,19 @@ export const SORTING_METHODS = {
 };
 
 const INITIAL_STATE = {
-  arrivalFilterWord: "",
-  departureFilterWord: "",
+  filterWords: { arrival: "", departure: "" },
   sortingType: SORTING_TYPES.ASC,
   sortingMethod: SORTING_METHODS.DEPARTURE
 };
 
 const filters = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case FILTER_ACTIONS.SET_ARRIVAL_FILTER:
+    case FILTER_ACTIONS.SET_FILTER_WORDS:
       return {
         ...state,
-        arrivalFilterWord: action.filterWord.toLowerCase()
+        filterWords: action.filterWordsObject
       };
-    case FILTER_ACTIONS.SET_DEPARTURE_FILTER:
-      return {
-        ...state,
-        departureFilterWord: action.filterWord.toLowerCase()
-      };
+
     case FILTER_ACTIONS.TOGGLE_SORTING_METHOD:
       return {
         ...state,
