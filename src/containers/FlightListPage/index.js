@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchFlights, goToPage } from "../../reducers/flights";
+import { fetchFlights, goToPage, clearFlights } from "../../reducers/flights";
 import {
   toggleSortingMethod,
   toggleSortingType,
@@ -16,12 +16,9 @@ import {
 import { Pagination } from "../../components/Pagination";
 
 class MainPage extends React.Component {
-  fetchFlightData() {
-    this.props.fetchFlights();
-  }
-
   componentDidMount() {
-    this.fetchFlightData();
+    this.props.clearFlights();
+    this.props.fetchFlights();
   }
 
   render() {
@@ -71,6 +68,7 @@ const mapDispatchToProps = dispatch => ({
   toggleSortingMethod: () => dispatch(toggleSortingMethod()),
   toggleSortingType: () => dispatch(toggleSortingType()),
   fetchFlights: () => dispatch(fetchFlights()),
+  clearFlights: () => dispatch(clearFlights()),
   goToPage: pageNr => dispatch(goToPage(pageNr)),
   setFilterWords: filterWordsObject =>
     dispatch(setFilterWords(filterWordsObject))

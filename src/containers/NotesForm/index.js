@@ -3,6 +3,7 @@ import { Field, reduxForm } from "redux-form";
 
 let ReduxForm = props => {
   const { handleSubmit } = props;
+  //just to add  a form. I did not exactly get what is expected here :(
   return (
     <form onSubmit={handleSubmit}>
       <div>

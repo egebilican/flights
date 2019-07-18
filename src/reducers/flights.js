@@ -2,6 +2,7 @@ export const FLIGHTS_ACTIONS = {
   SET_BUSINESS_FLIGHTS: "SET_BUSINESS_FLIGHTS",
   SET_CHEAP_FLIGHTS: "SET_CHEAP_FLIGHTS",
   FETCH_FLIGHTS: "FETCH_FLIGHTS",
+  CLEAR_FLIGHTS: "CLEAR_FLIGHTS",
   FETCH_FAILED: "FETCH_FAILED",
   GO_TO_PAGE: "GO_TO_PAGE"
 };
@@ -10,6 +11,11 @@ export const FLIGHTS_PER_PAGE = 5;
 
 export const fetchFlights = searchTerm => ({
   type: FLIGHTS_ACTIONS.FETCH_FLIGHTS,
+  searchTerm
+});
+
+export const clearFlights = searchTerm => ({
+  type: FLIGHTS_ACTIONS.CLEAR_FLIGHTS,
   searchTerm
 });
 
@@ -48,6 +54,8 @@ const INITIAL_STATE = {
 
 const flights = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case FLIGHTS_ACTIONS.CLEAR_FLIGHTS:
+      return { ...state, availableFlights: [] };
     case FLIGHTS_ACTIONS.SET_BUSINESS_FLIGHTS:
       if (action && action.flights && action.flights.data) {
         const newAvailableFlights = [
