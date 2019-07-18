@@ -14,7 +14,6 @@ const availableFlightsSelector = state => state.flights.availableFlights;
 const sortingTypeSelector = state => state.filters.sortingType;
 const sortingMethodSelector = state => state.filters.sortingMethod;
 
-//TODO: get page nr, filter accordingly
 export const orderedListSelector = createSelector(
   arrivalFilterWordSelector,
   departureFilterWordSelector,

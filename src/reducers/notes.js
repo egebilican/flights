@@ -12,7 +12,10 @@ export const removeNote = noteIndex => ({
   type: NOTES_ACTIONS.REMOVE_NOTE,
   noteIndex
 });
-const INITIAL_STATE = [];
+const INITIAL_STATE = [
+  { departure: "Istanbul", arrival: "Mars", note: "Business flight" },
+  { departure: "Izmir", arrival: "Ankara", note: "Cheap flight" }
+];
 
 const filters = (state = INITIAL_STATE, action) => {
   switch (action.type) {

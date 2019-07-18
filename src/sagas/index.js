@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, takeLatest, fork, delay } from "redux-saga/effects";
 import { FLIGHTS_ACTIONS } from "../reducers/flights";
 import { getRequest } from "../utils/request";
 
@@ -7,19 +7,26 @@ const API = {
   cheap: "https://tokigames-challenge.herokuapp.com/api/flights/cheap"
 };
 
+function* fetchCheap() {
+  const cheapFlights = yield call(getRequest, API.cheap);
+  yield put({
+    type: FLIGHTS_ACTIONS.SET_CHEAP_FLIGHTS,
+    flights: cheapFlights.data
+  });
+}
+
+function* fetchBusiness() {
+  const businessFlights = yield call(getRequest, API.business);
+  yield put({
+    type: FLIGHTS_ACTIONS.SET_BUSINESS_FLIGHTS,
+    flights: businessFlights.data
+  });
+}
+//TODO: Add loading indicator
 function* fetchFlightData(action) {
   try {
-    //TODO: MAKE THEM PARALLEL
-    const businessFlights = yield call(getRequest, API.business);
-    const cheapFlights = yield call(getRequest, API.cheap);
-    yield put({
-      type: FLIGHTS_ACTIONS.SET_BUSINESS_FLIGHTS,
-      flights: businessFlights.data
-    });
-    yield put({
-      type: FLIGHTS_ACTIONS.SET_CHEAP_FLIGHTS,
-      flights: cheapFlights.data
-    });
+    yield fork(fetchCheap);
+    yield fork(fetchBusiness);
   } catch (e) {
     yield put({
       type: FLIGHTS_ACTIONS.FETCH_FAILED,
